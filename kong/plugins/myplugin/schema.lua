@@ -15,11 +15,13 @@ local schema = {
         fields = {
           -- a standard defined field (typedef), with some customizations
           { request_header = typedefs.header_name {
-              required = true,
-              default = "Hello-World" } },
+              type = "string",
+              required = false,
+              default = "X-Request-Echo" } },
           { response_header = typedefs.header_name {
-              required = true,
-              default = "Bye-World" } },
+              type = "string",
+              required = false,
+              default = "X-Response-Echo" } },
           { ttl = { -- self defined field
               type = "integer",
               default = 600,

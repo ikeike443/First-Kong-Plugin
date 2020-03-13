@@ -18,7 +18,6 @@ local plugin = {
 }
 
 
-
 -- do initialization here, any module level code runs in the 'init_by_lua_block',
 -- before worker processes are forked. So anything you add here will run once,
 -- but be available in all workers.
@@ -30,7 +29,9 @@ local plugin = {
 function plugin:init_worker()
 
   -- your custom code here
-  kong.log.debug("saying hi from the 'init_worker' handler")
+  kong.log.debug("saying hiiiii!!! from the 'init_worker' handler")
+
+  self.echo_string = ""
 
 end --]]
 
@@ -63,9 +64,9 @@ end --]]
 function plugin:access(plugin_conf)
 
   -- your custom code here
-  kong.log.inspect(plugin_conf)   -- check the logs for a pretty-printed config!
-  ngx.req.set_header(plugin_conf.request_header, "this is on a request")
-
+ -- kong.log.inspect(plugin_conf)   -- check the logs for a pretty-printed config!
+  -- ngx.req.set_header(plugin_conf.request_header, "this is on a request")
+  self.echo_string = kong.request.get_header(plugin_conf.request_header)
 end --]]
 
 
@@ -73,7 +74,11 @@ end --]]
 function plugin:header_filter(plugin_conf)
 
   -- your custom code here, for example;
-  ngx.header[plugin_conf.response_header] = "this is on the response"
+  -- ngx.header[plugin_conf.response_header] = "this is on the response"
+
+  if self.echo_string ~= "" then
+    kong.response.set_header(plugin_conf.response_header, self.echo_string)
+  end
 
 end --]]
 

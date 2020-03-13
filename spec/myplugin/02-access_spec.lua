@@ -53,33 +53,35 @@ for _, strategy in helpers.each_strategy() do
       it("gets a 'hello-world' header", function()
         local r = client:get("/request", {
           headers = {
-            host = "test1.com"
+            host = "test1.com",
+            ["X-Request-Echo"] = "Hello!"
           }
         })
         -- validate that the request succeeded, response status 200
         assert.response(r).has.status(200)
         -- now check the request (as echoed by mockbin) to have the header
-        local header_value = assert.request(r).has.header("hello-world")
+        local header_value = assert.request(r).has.header("X-Request-Echo")
         -- validate the value of that header
-        assert.equal("this is on a request", header_value)
+        assert.equal("Hello!", header_value)
       end)
     end)
 
 
 
     describe("response", function()
-      it("gets a 'bye-world' header", function()
+      it("gets a 'X-Response-Echo' header", function()
         local r = client:get("/request", {
           headers = {
-            host = "test1.com"
+            host = "test1.com",
+            ["X-Request-Echo"] = "Hello!"
           }
         })
         -- validate that the request succeeded, response status 200
         assert.response(r).has.status(200)
         -- now check the response to have the header
-        local header_value = assert.response(r).has.header("bye-world")
+        local header_value = assert.response(r).has.header("X-Response-Echo")
         -- validate the value of that header
-        assert.equal("this is on the response", header_value)
+        assert.equal("Hello!", header_value)
       end)
     end)
 
